@@ -247,11 +247,13 @@ CanvasRenderer.prototype.updateContainerSize = function () {
             this.elements[i].resize(this.globalData.transformCanvas);
         }
     } */
-  this.ctxTransform(this.transformCanvas.props);
-  this.canvasContext.beginPath();
-  this.canvasContext.rect(0, 0, this.transformCanvas.w, this.transformCanvas.h);
-  this.canvasContext.closePath();
-  this.canvasContext.clip();
+  if (this.renderConfig.clearCanvas === true) {
+    this.ctxTransform(this.transformCanvas.props);
+    this.canvasContext.beginPath();
+    this.canvasContext.rect(0, 0, this.transformCanvas.w, this.transformCanvas.h);
+    this.canvasContext.closePath();
+    this.canvasContext.clip();
+  }
 
   this.renderFrame(this.renderedFrame, true);
 };
@@ -301,6 +303,12 @@ CanvasRenderer.prototype.renderFrame = function (num, forceRender) {
       this.canvasContext.clearRect(0, 0, this.transformCanvas.w, this.transformCanvas.h);
     } else {
       this.save();
+
+      this.ctxTransform(this.transformCanvas.props);
+      this.canvasContext.beginPath();
+      this.canvasContext.rect(0, 0, this.transformCanvas.w, this.transformCanvas.h);
+      this.canvasContext.closePath();
+      this.canvasContext.clip();
     }
     for (i = len - 1; i >= 0; i -= 1) {
       if (this.completeLayers || this.elements[i]) {
